@@ -1,35 +1,114 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import styled from "styled-components";
+import "./App.css";
+
+const unitLength = "10vw";
+
+type LetterProps = {
+  value: string;
+  hasHeight?: boolean;
+  hasWidth?: boolean;
+};
+
+const Letter = styled.div<LetterProps>`
+  width: ${(props) => (props.hasWidth ? "auto" : 0)};
+  height: ${(props) => (props.hasHeight ? "auto" : 0)};
+  color: blue;
+  &:after {
+    content: ${(props) => `"${props.value}"`};
+  }
+`;
+
+const Container = styled.div`
+  display: flex;
+`;
+
+const Pool = styled.div`
+  width: calc(${unitLength} * 4);
+  height: calc(${unitLength} * 8);
+  border: 1px solid black;
+  background-color: green;
+`;
+
+const ShortRail = styled.div`
+  width: calc(${unitLength} * 4);
+  height: calc(${unitLength} * 0.5);
+  border: 1px solid black;
+  background-color: grey;
+
+  display: flex;
+  justify-content: space-between;
+`;
+
+const LongRail = styled.div`
+  width: calc(${unitLength} * 0.5);
+  height: calc(${unitLength} * 8);
+  border: 1px solid black;
+  background-color: grey;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`;
+
+const Square = styled.div`
+  width: calc(${unitLength} * 0.5);
+  height: calc(${unitLength} * 0.5);
+  border: 1px solid black;
+  background-color: white;
+`;
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Container>
+        <Square></Square>
+        <ShortRail>
+          <Letter value=""></Letter>
+          <Letter value="|"></Letter>
+          <Letter value="|"></Letter>
+          <Letter value="|"></Letter>
+          <Letter value=""></Letter>
+        </ShortRail>
+        <Square></Square>
+      </Container>
+      <Container>
+        <LongRail>
+          <Letter value=""></Letter>
+          <Letter value="━━" hasWidth={true}></Letter>
+          <Letter value="━━" hasWidth={true}></Letter>
+          <Letter value="━━" hasWidth={true}></Letter>
+          <Letter value="●" hasWidth={true}></Letter>
+          <Letter value="━━" hasWidth={true}></Letter>
+          <Letter value="━━" hasWidth={true}></Letter>
+          <Letter value="━━" hasWidth={true}></Letter>
+          <Letter value=""></Letter>
+        </LongRail>
+        <Pool></Pool>
+        <LongRail>
+          <Letter value=""></Letter>
+          <Letter value="━━" hasWidth={true}></Letter>
+          <Letter value="━━" hasWidth={true}></Letter>
+          <Letter value="━━" hasWidth={true}></Letter>
+          <Letter value="●" hasWidth={true}></Letter>
+          <Letter value="━━" hasWidth={true}></Letter>
+          <Letter value="━━" hasWidth={true}></Letter>
+          <Letter value="━━" hasWidth={true}></Letter>
+          <Letter value=""></Letter>
+        </LongRail>
+      </Container>
+      <Container>
+        <Square></Square>
+        <ShortRail>
+          <Letter value=""></Letter>
+          <Letter value="|"></Letter>
+          <Letter value="|"></Letter>
+          <Letter value="|"></Letter>
+          <Letter value=""></Letter>
+        </ShortRail>
+        <Square></Square>
+      </Container>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
