@@ -1,4 +1,4 @@
-import { useAtom, useAtomValue } from "jotai";
+import { useAtom } from "jotai";
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { ballSeelctionAtom } from "../atoms";
