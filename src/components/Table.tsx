@@ -1,9 +1,11 @@
-import { useAtomValue } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { ballSeelctionAtom } from "../atoms";
 
 const unitLength = "18vw";
+const vwInPixel = window.innerWidth / 100;
+const unitLengthPx = 18 * vwInPixel;
 
 type LetterProps = {
   $value: string;
@@ -68,10 +70,11 @@ type CircleProps = {
   $color: string;
 };
 
-const circleDiameter = 0.2;
+const circleDiameterUnit = 0.2;
+const circleDiameterPx = circleDiameterUnit * unitLengthPx;
 const Circle = styled.div<CircleProps>`
-  width: calc(${unitLength} * ${circleDiameter});
-  height: calc(${unitLength} * ${circleDiameter});
+  width: calc(${unitLength} * ${circleDiameterUnit});
+  height: calc(${unitLength} * ${circleDiameterUnit});
   background-color: ${(props) => props.$color};
   border-radius: 50%;
 `;
@@ -79,7 +82,7 @@ const Circle = styled.div<CircleProps>`
 function Table(): JSX.Element {
   const [obPos, setObPos] = useState<Vector | null>(null);
   const [cbPos, setCbPos] = useState<Vector | null>(null);
-  const selected = useAtomValue(ballSeelctionAtom);
+  const [selected, setSelected] = useAtom(ballSeelctionAtom);
   const ref = useRef<HTMLDivElement>(null);
   const [corner, setCorner] = useState<Vector>({ x: 0, y: 0 });
 
@@ -87,9 +90,17 @@ function Table(): JSX.Element {
     const x = event.clientX;
     const y = event.clientY;
     if (selected === "cue") {
-      setCbPos({ x: x - corner.x, y: y - corner.y });
+      setCbPos({
+        x: x - corner.x - 0.5 * circleDiameterPx,
+        y: y - corner.y - 0.5 * circleDiameterPx,
+      });
+      setSelected("object");
     } else if (selected === "object") {
-      setObPos({ x: x - corner.x, y: y - corner.y });
+      setObPos({
+        x: x - corner.x - 0.5 * circleDiameterPx,
+        y: y - corner.y - 0.5 * circleDiameterPx,
+      });
+      setSelected("cue");
     } else {
       throw new Error(`unknown selection: ${selected}`);
     }
