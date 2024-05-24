@@ -79,28 +79,43 @@ const Circle = styled.div<CircleProps>`
   border-radius: 50%;
 `;
 
+const initPosObj = JSON.parse(localStorage.getItem("object") || "null");
+const initPosCue = JSON.parse(localStorage.getItem("cue") || "null");
+
 function Table(): JSX.Element {
-  const [obPos, setObPos] = useState<Vector | null>(null);
-  const [cbPos, setCbPos] = useState<Vector | null>(null);
+  const [obPos, setObPos] = useState<Vector | null>(
+    initPosObj ? initPosObj : null
+  );
+  const [cbPos, setCbPos] = useState<Vector | null>(
+    initPosCue ? initPosCue : null
+  );
   const [selected, setSelected] = useAtom(ballSeelctionAtom);
   const ref = useRef<HTMLDivElement>(null);
   const [corner, setCorner] = useState<Vector>({ x: 0, y: 0 });
+
+  const savePositions = (name: string, pos: Vector) => {
+    localStorage.setItem(name, JSON.stringify(pos));
+  };
 
   const handleClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     const x = event.clientX;
     const y = event.clientY;
     if (selected === "cue") {
-      setCbPos({
+      const pos = {
         x: x - corner.x - 0.5 * circleDiameterPx,
         y: y - corner.y - 0.5 * circleDiameterPx,
-      });
+      };
+      setCbPos(pos);
       setSelected("object");
+      savePositions("cue", pos);
     } else if (selected === "object") {
-      setObPos({
+      const pos = {
         x: x - corner.x - 0.5 * circleDiameterPx,
         y: y - corner.y - 0.5 * circleDiameterPx,
-      });
+      };
+      setObPos(pos);
       setSelected("cue");
+      savePositions("object", pos);
     } else {
       throw new Error(`unknown selection: ${selected}`);
     }
